@@ -16,6 +16,7 @@ const colorSlice = createSlice({
     initialState,
     reducers: {
         refresh: (state) => {
+            console.log('refresh')
             state.count = 5
             state.colors = [
                 String(chroma.random()),
@@ -26,6 +27,7 @@ const colorSlice = createSlice({
             ]
         },
         addLeftColor: (state, { payload }) => {
+            console.log('addLeftColor')
             if (state.count < 9) {
                 const index = state.colors.indexOf(payload)
                 const firstColor = state.colors[index]
@@ -40,6 +42,7 @@ const colorSlice = createSlice({
             }
         },
         addRightColor: (state, { payload }) => {
+            console.log('addRightColor')
             if (state.count < 9) {
                 const index = state.colors.indexOf(payload)
                 const firstColor = state.colors[index]
@@ -54,13 +57,31 @@ const colorSlice = createSlice({
             }
         },
         removeColor: (state, { payload }) => {
+            console.log('removeColor')
             state.count -= 1
             state.colors = state.colors.filter((color) => color !== payload)
+        },
+        updateColor: (state, { payload }) => {
+            console.log('updateColor')
+            const currentColorIndex = state.colors.indexOf(payload.color)
+            state.colors = [
+                ...state.colors.slice(0, currentColorIndex),
+                payload.newColor,
+                ...state.colors.slice(
+                    currentColorIndex + 1,
+                    state.colors.length
+                )
+            ]
         }
     }
 })
 
 export const colorReducer = colorSlice.reducer
 
-export const { refresh, addLeftColor, addRightColor, removeColor } =
-    colorSlice.actions
+export const {
+    refresh,
+    addLeftColor,
+    addRightColor,
+    removeColor,
+    updateColor
+} = colorSlice.actions

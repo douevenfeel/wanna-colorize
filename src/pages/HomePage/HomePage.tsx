@@ -20,7 +20,7 @@ export const HomePage = () => {
         <Page>
             {colors.map((color, index) => (
                 <Color
-                    key={color}
+                    key={`${color}${index}`}
                     color={color}
                     textColor={
                         chroma(color).luminance() >= 0.5 ? '#222' : '#eee'

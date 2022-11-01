@@ -1,6 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import { addLeftColor, addRightColor, removeColor } from 'store/colorSlice'
+import {
+    addLeftColor,
+    addRightColor,
+    removeColor,
+    updateColor
+} from 'store/colorSlice'
 
 import { useAppDispatch } from 'hooks/redux'
 
@@ -18,6 +23,7 @@ export const Color: React.FC<ColorProps> = ({
     isFirst,
     isLast
 }) => {
+    const [newColor, setNewColor] = useState(color)
     const dispatch = useAppDispatch()
 
     const handleRemove = () => {
@@ -32,11 +38,21 @@ export const Color: React.FC<ColorProps> = ({
         dispatch(addLeftColor(color))
     }
 
+    const handleColor = () => {
+        dispatch(updateColor({ newColor, color }))
+    }
+
     return (
         <ColorStyled color={color} textColor={textColor}>
             <Button color={color} textColor={textColor}>
                 {color}
             </Button>
+            <input
+                type='color'
+                value={color}
+                onChange={(e) => setNewColor(e.target.value)}
+                onBlur={handleColor}
+            />
             <CiCircleRemoveStyled color={textColor} onClick={handleRemove} />
             {!isFirst && (
                 <CiCirclePlusStyled
