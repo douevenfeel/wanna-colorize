@@ -83,7 +83,11 @@ export const Color: React.FC<ColorProps> = ({
                 />
             )}
             <Button color={color} textColor={textColor}>
-                {color}
+                {color
+                    .split('')
+                    .splice(1, color.length)
+                    .map((symbol) => symbol.toUpperCase())
+                    .join('')}
             </Button>
         </ColorStyled>
     )

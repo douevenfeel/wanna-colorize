@@ -5,6 +5,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', sans-serif;
+    transition: all 0.2s ease-in-out;
 }
 
 body {

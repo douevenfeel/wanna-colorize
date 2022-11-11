@@ -22,8 +22,9 @@ export const ColorStyled = styled.div<{ color: string }>`
     @media (max-width: 900px) {
         width: 100vw;
         height: 100%;
-        flex-direction: row-reverse;
-        padding: 20px;
+        padding: 24px;
+        gap: 12px;
+        justify-content: center;
     }
 `
 
@@ -32,14 +33,18 @@ export const Button = styled.button<{ color: string; textColor: string }>`
     font-weight: 600;
     cursor: pointer;
     outline: none;
+    background: none;
     border: none;
-    background: #ffffff44;
     color: ${(props) => props.textColor};
     padding: 4px 8px;
     border-radius: 8px;
 
     @media (max-width: 900px) {
         font-size: 18px;
+    }
+
+    &:hover {
+        background: #ffffff44;
     }
 `
 export const IoCloseCircleOutlineStyled = styled(IoCloseCircleOutline)<{
@@ -49,12 +54,15 @@ export const IoCloseCircleOutlineStyled = styled(IoCloseCircleOutline)<{
     width: 36px;
     height: 36px;
     color: ${(props) => props.color};
-    background: #ffffff44;
     border-radius: 50%;
     cursor: pointer;
 
     ${ColorStyled}:hover & {
         display: block;
+    }
+
+    &:hover {
+        background: #ffffff44;
     }
 
     @media (max-width: 900px) {
@@ -72,13 +80,16 @@ export const IoAddCircleOutlineStyled = styled(IoAddCircleOutline)<{
     width: 36px;
     height: 36px;
     color: ${(props) => props.color};
-    background: #ffffff44;
     border-radius: 50%;
     cursor: pointer;
     z-index: 10;
 
     ${ColorStyled}:hover & {
         display: block;
+    }
+
+    &:hover {
+        background: #ffffff44;
     }
 
     @media (max-width: 900px) {
@@ -88,12 +99,12 @@ export const IoAddCircleOutlineStyled = styled(IoAddCircleOutline)<{
         ${(props) =>
             props.type === 'left'
                 ? css`
-                      top: -18px;
-                      left: calc(50vw - 18px);
+                      top: -14px;
+                      left: calc(50vw - 14px);
                   `
                 : css`
-                      bottom: -18px;
-                      left: calc(50vw - 18px);
+                      bottom: -14px;
+                      left: calc(50vw - 14px);
                   `};
     }
 
@@ -119,9 +130,15 @@ export const IoLockClosedOutlineStyled = styled(IoLockClosedOutline)<{
     height: 36px;
     color: ${(props) => props.color};
     cursor: pointer;
+    border-radius: 20%;
+    padding: 1px 0;
 
     ${ColorStyled}:hover & {
         display: block;
+    }
+
+    &:hover {
+        background: #ffffff44;
     }
 
     @media (max-width: 900px) {
@@ -138,9 +155,15 @@ export const IoLockOpenOutlineStyled = styled(IoLockOpenOutline)<{
     height: 36px;
     color: ${(props) => props.color};
     cursor: pointer;
+    border-radius: 20%;
+    padding: 1px 0;
 
     ${ColorStyled}:hover & {
         display: block;
+    }
+
+    &:hover {
+        background: #ffffff44;
     }
 
     @media (max-width: 900px) {
@@ -155,9 +178,14 @@ export const IoCopyOutlineStyled = styled(IoCopyOutline)<{ color: string }>`
     height: 36px;
     color: ${(props) => props.color};
     cursor: pointer;
+    border-radius: 20%;
 
     ${ColorStyled}:hover & {
         display: block;
+    }
+
+    &:hover {
+        background: #ffffff44;
     }
 
     @media (max-width: 900px) {

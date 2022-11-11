@@ -1,10 +1,9 @@
 import styled from 'styled-components'
 
 export const HeaderStyled = styled.div`
-    display: flex;
-    justify-content: flex-end;
     position: absolute;
-    width: 100vw;
+    right: 0;
+    width: auto;
     background: #00000024;
     padding: 4px 12px;
     z-index: 9999;
@@ -32,6 +31,7 @@ export const Button = styled.button`
     color: #eee;
     font-size: 16px;
     font-weight: 500;
+    cursor: pointer;
 
     @media (min-width: 901px) {
         display: none;
