@@ -1,19 +1,22 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import {
     addLeftColor,
     addRightColor,
-    removeColor,
-    updateColor
+    lockColor,
+    removeColor
 } from 'store/colorSlice'
 
 import { useAppDispatch } from 'hooks/redux'
 
 import {
     Button,
-    CiCirclePlusStyled,
-    CiCircleRemoveStyled,
-    ColorStyled
+    ColorStyled,
+    IoAddCircleOutlineStyled,
+    IoCloseCircleOutlineStyled,
+    IoCopyOutlineStyled,
+    IoLockClosedOutlineStyled,
+    IoLockOpenOutlineStyled
 } from './Color.style'
 import { ColorProps } from './Color.types'
 
@@ -21,9 +24,9 @@ export const Color: React.FC<ColorProps> = ({
     color,
     textColor,
     isFirst,
-    isLast
+    isLast,
+    isLocked
 }) => {
-    const [newColor, setNewColor] = useState(color)
     const dispatch = useAppDispatch()
 
     const handleRemove = () => {
@@ -38,36 +41,50 @@ export const Color: React.FC<ColorProps> = ({
         dispatch(addLeftColor(color))
     }
 
-    const handleColor = () => {
-        dispatch(updateColor({ newColor, color }))
+    const handleLock = () => {
+        dispatch(lockColor(color))
+    }
+
+    const handleCopy = () => {
+        console.log('copy')
+        navigator.clipboard.writeText(color)
     }
 
     return (
-        <ColorStyled color={color} textColor={textColor}>
-            <Button color={color} textColor={textColor}>
-                {color}
-            </Button>
-            <input
-                type='color'
-                value={color}
-                onChange={(e) => setNewColor(e.target.value)}
-                onBlur={handleColor}
+        <ColorStyled color={color}>
+            {isLocked ? (
+                <IoLockClosedOutlineStyled
+                    onClick={handleLock}
+                    color={textColor}
+                />
+            ) : (
+                <IoLockOpenOutlineStyled
+                    onClick={handleLock}
+                    color={textColor}
+                />
+            )}
+            <IoCopyOutlineStyled color={textColor} onClick={handleCopy} />
+            <IoCloseCircleOutlineStyled
+                color={textColor}
+                onClick={handleRemove}
             />
-            <CiCircleRemoveStyled color={textColor} onClick={handleRemove} />
             {!isFirst && (
-                <CiCirclePlusStyled
+                <IoAddCircleOutlineStyled
                     color={textColor}
                     onClick={handleAddLeft}
                     type='left'
                 />
             )}
             {!isLast && (
-                <CiCirclePlusStyled
+                <IoAddCircleOutlineStyled
                     color={textColor}
                     onClick={handleAddRight}
                     type='right'
                 />
             )}
+            <Button color={color} textColor={textColor}>
+                {color}
+            </Button>
         </ColorStyled>
     )
 }

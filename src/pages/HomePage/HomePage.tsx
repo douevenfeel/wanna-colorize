@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 
 import { Color } from 'components/Color'
 
-import { refresh } from 'store/colorSlice'
+import { refresh, reset } from 'store/colorSlice'
 
 import { useAppDispatch, useAppSelector } from 'hooks/redux'
 
@@ -13,20 +13,25 @@ export const HomePage = () => {
     const { colors, count } = useAppSelector((store) => store.color)
     const dispatch = useAppDispatch()
     useEffect(() => {
-        count === 0 && dispatch(refresh())
+        count === 0 && dispatch(reset())
     }, [count, dispatch])
 
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        e.code === 'Space' && dispatch(refresh())
+    }
+
     return (
-        <Page>
+        <Page onKeyUp={handleKeyPress} tabIndex={-1}>
             {colors.map((color, index) => (
                 <Color
                     key={`${color}${index}`}
-                    color={color}
+                    color={color.color}
                     textColor={
-                        chroma(color).luminance() >= 0.5 ? '#222' : '#eee'
+                        chroma(color.color).luminance() >= 0.5 ? '#222' : '#eee'
                     }
                     isFirst={index === 0}
                     isLast={index === count - 1}
+                    isLocked={color.isLocked}
                 />
             ))}
         </Page>

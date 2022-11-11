@@ -1,41 +1,70 @@
 import { createSlice } from '@reduxjs/toolkit'
 import chroma from 'chroma-js'
+import { ColorModel } from 'models/colorModel'
 
 export interface ColorState {
     count: number
-    colors: string[]
+    colors: ColorModel[]
 }
 
 const initialState: ColorState = {
-    count: 0,
-    colors: []
+    count: 5,
+    colors: [
+        {
+            color: String(chroma.random()),
+            isLocked: false
+        },
+        {
+            color: String(chroma.random()),
+            isLocked: false
+        },
+        {
+            color: String(chroma.random()),
+            isLocked: false
+        },
+        {
+            color: String(chroma.random()),
+            isLocked: false
+        },
+        {
+            color: String(chroma.random()),
+            isLocked: false
+        }
+    ]
 }
 
 const colorSlice = createSlice({
     name: 'color',
     initialState,
     reducers: {
+        reset: (state) => initialState,
         refresh: (state) => {
             console.log('refresh')
-            state.count = 5
-            state.colors = [
-                String(chroma.random()),
-                String(chroma.random()),
-                String(chroma.random()),
-                String(chroma.random()),
-                String(chroma.random())
-            ]
+            state.colors = state.colors.map((color) => {
+                if (color.isLocked) {
+                    return color
+                } else {
+                    return {
+                        color: String(chroma.random()),
+                        isLocked: false
+                    }
+                }
+            })
         },
         addLeftColor: (state, { payload }) => {
             console.log('addLeftColor')
             if (state.count < 9) {
-                const index = state.colors.indexOf(payload)
-                const firstColor = state.colors[index]
+                const [firstColor] = state.colors.filter(
+                    (color) => color.color === payload
+                )
+                const index = state.colors.indexOf(firstColor)
                 const secondColor = state.colors[index - 1]
-                const newColor = chroma.mix(firstColor, secondColor).hex()
+                const newColor = chroma
+                    .mix(firstColor.color, secondColor.color)
+                    .hex()
                 state.colors = [
                     ...state.colors.slice(0, index),
-                    newColor,
+                    { color: newColor, isLocked: false },
                     ...state.colors.slice(index, state.count)
                 ]
                 state.count++
@@ -44,13 +73,17 @@ const colorSlice = createSlice({
         addRightColor: (state, { payload }) => {
             console.log('addRightColor')
             if (state.count < 9) {
-                const index = state.colors.indexOf(payload)
-                const firstColor = state.colors[index]
+                const [firstColor] = state.colors.filter(
+                    (color) => color.color === payload
+                )
+                const index = state.colors.indexOf(firstColor)
                 const secondColor = state.colors[index + 1]
-                const newColor = chroma.mix(firstColor, secondColor).hex()
+                const newColor = chroma
+                    .mix(firstColor.color, secondColor.color)
+                    .hex()
                 state.colors = [
                     ...state.colors.slice(0, index + 1),
-                    newColor,
+                    { color: newColor, isLocked: false },
                     ...state.colors.slice(index + 1, state.count)
                 ]
                 state.count++
@@ -59,19 +92,20 @@ const colorSlice = createSlice({
         removeColor: (state, { payload }) => {
             console.log('removeColor')
             state.count -= 1
-            state.colors = state.colors.filter((color) => color !== payload)
+            state.colors = state.colors.filter(
+                (color) => color.color !== payload
+            )
         },
-        updateColor: (state, { payload }) => {
-            console.log('updateColor')
-            const currentColorIndex = state.colors.indexOf(payload.color)
-            state.colors = [
-                ...state.colors.slice(0, currentColorIndex),
-                payload.newColor,
-                ...state.colors.slice(
-                    currentColorIndex + 1,
-                    state.colors.length
-                )
-            ]
+        lockColor: (state, { payload }) => {
+            console.log('lockColor')
+            const [currentColor] = state.colors.filter(
+                (color) => color.color === payload
+            )
+            const currentColorIndex = state.colors.indexOf(currentColor)
+            state.colors[currentColorIndex] = {
+                color: currentColor.color,
+                isLocked: !currentColor.isLocked
+            }
         }
     }
 })
@@ -79,9 +113,10 @@ const colorSlice = createSlice({
 export const colorReducer = colorSlice.reducer
 
 export const {
+    reset,
     refresh,
     addLeftColor,
     addRightColor,
     removeColor,
-    updateColor
+    lockColor
 } = colorSlice.actions
